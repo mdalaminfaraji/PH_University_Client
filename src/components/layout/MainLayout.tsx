@@ -1,9 +1,11 @@
-import { Layout, Menu } from "antd";
-
+import { Button, Layout } from "antd";
+import { useAppDispatch } from "../../redux/hooks";
 import { Outlet } from "react-router-dom";
-import { adminPaths } from "../../routes/admin.routes";
-import { SidebarItemsGenerator } from "../../utils/sidebarItemsGenerator";
-const { Header, Content, Footer, Sider } = Layout;
+import Sidebar from "./Sidebar";
+
+import { logout } from "../../redux/features/auth/authSlice";
+
+const { Header, Content } = Layout;
 
 // const items: MenuProps["items"] = [
 //   {
@@ -31,39 +33,17 @@ const { Header, Content, Footer, Sider } = Layout;
 // ];
 
 const MainLayout = () => {
+  const dispatch = useAppDispatch();
+  const handleLogout = () => {
+    dispatch(logout());
+  };
   return (
     <Layout style={{ height: "100vh" }}>
-      <Sider
-        breakpoint="lg"
-        collapsedWidth="0"
-        onBreakpoint={(broken) => {
-          console.log(broken);
-        }}
-        onCollapse={(collapsed, type) => {
-          console.log(collapsed, type);
-        }}
-      >
-        <div
-          style={{
-            color: "white",
-            height: "4rem",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <h1>PH Uni</h1>
-        </div>
-        <Menu
-          style={{ color: "white" }}
-          theme="dark"
-          mode="inline"
-          defaultSelectedKeys={["4"]}
-          items={SidebarItemsGenerator(adminPaths, "admin")}
-        />
-      </Sider>
+      <Sidebar />
       <Layout>
-        <Header style={{ padding: 0 }} />
+        <Header>
+          <Button onClick={handleLogout}>Logout </Button>
+        </Header>
         <Content style={{ margin: "24px 16px 0" }}>
           <div
             style={{
@@ -73,9 +53,6 @@ const MainLayout = () => {
             <Outlet />
           </div>
         </Content>
-        <Footer style={{ textAlign: "center" }}>
-          Ant Design ©{new Date().getFullYear()} Created by Ant UED
-        </Footer>
       </Layout>
     </Layout>
   );
